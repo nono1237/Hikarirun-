@@ -289,15 +289,3 @@
   "id": "H52zZSnpcEG4mA4a",
   "tags": []
 }
-{
-  "mdr": "Hikarirun est un",
-  // Ajout d'un test pour voir si GitHub envoie bien l'update
-  "noeuds": [
-    {
-      "paramètres": {
-        "mises à jour": [],
-        "message": ""
-      }
-    }
-  ]
-}
