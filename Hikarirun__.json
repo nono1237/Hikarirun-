@@ -1,5 +1,5 @@
 {
-  "name": "Hikarirun 光",
+  "name": "debug",
   "nodes": [
     {
       "parameters": {
@@ -12,9 +12,9 @@
       "typeVersion": 1.1,
       "position": [
         -180,
-        -140
+        -120
       ],
-      "id": "192a5e68-9373-45a7-ad59-7e0eb6eb4e9d",
+      "id": "309af7f5-b648-4268-9ec8-cdf8af70d01d",
       "name": "Telegram Trigger",
       "webhookId": "e1952b58-3974-472e-80aa-7ccfeeb07444",
       "credentials": {
@@ -61,9 +61,9 @@
       "typeVersion": 3.2,
       "position": [
         40,
-        -140
+        -120
       ],
-      "id": "1b40524a-d7ba-4e6e-a564-d956c8414022",
+      "id": "ced10439-be99-4820-b9c0-4514f7c46f4b",
       "name": "Switch"
     },
     {
@@ -71,9 +71,9 @@
         "assignments": {
           "assignments": [
             {
-              "id": "108e0f9f-84f4-4144-8b11-de30622f7b55",
-              "name": "Text.",
-              "value": "={{ $json.message.text ? $('Telegram Trigger').item.json.message.text : 'Texte non défini' }}",
+              "id": "920f5483-a459-41b1-86ae-c87b181e1e93",
+              "name": "text",
+              "value": "={{ $json.message }}",
               "type": "string"
             }
           ]
@@ -84,26 +84,26 @@
       "typeVersion": 3.4,
       "position": [
         260,
-        -140
+        -120
       ],
-      "id": "dcd770bb-ac5f-43b9-a649-5ba076c178b5",
+      "id": "f2276f72-d54a-4004-865f-9153f02419f6",
       "name": "Edit Fields"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.Text }}",
+        "text": "={{ $('Switch').item.json.message.message_id }}",
         "options": {
-          "systemMessage": "=Votre rôle est d'analyser les demandes, de clarifier les incertitudes et, surtout, de stocker et de récupérer les \"souvenirs\" concernant les informations fournies par l'utilisateur.\n\nCapacités de base:\nConscience du contexte - La date et l'heure est: {{ $now }}\n\nGestion de la mémoire - Vous interagissez avec les outils Supabase pour la gestion de la mémoire:\n\nAppelez l'outil Store_Memory pour enregistrer de nouveaux \"souvenirs\" et vous souvenir des détails et des faits en fonction des informations de l'utilisateur. Résumez les informations fournies par l'utilisateur en une phrase d'une ligne à stocker dans une base de données Supabase.\n\nAppelez l'outil Get_Memory pour récupérer les \"souvenirs\" enregistrés afin de répondre aux questions de l'utilisateur et de rédiger des messages.\n\nClarification avant action - Si une demande est floue, posez des questions de clarification à l'utilisateur avant d'appeler des outils pour garantir l'exactitude. Appelez toujours l'outil Get_Memory pour vérifier les informations stockées avant de répondre.\n\nWorkflow de gestion de la mémoire:\nRécupérez les souvenirs pertinents avant de répondre ou d'enregistrer de nouvelles informations.\n\nVérifiez les doublons - Si l'utilisateur fournit des informations similaires à une mémoire existante, ne les enregistrez pas à nouveau. Si un doublon est trouvé, reconnaissez-le avec une réponse comme :\n\"Je le sais déjà ! Voici les informations que vous avez partagées plus tôt.\" N'enregistrez que les nouvelles informations uniques pour éviter la redondance.\n\nDirectives de comportement:\nMaintenez un ton professionnel, doux et amical.\nSoyez proactif dans le rappel des informations pertinentes pour améliorer vos réponses.\nClarifiez les demandes ambiguës avant d'exécuter des tâches.\nConfirmez les actions si nécessaire pour garantir que les attentes de l'utilisateur sont satisfaites."
+          "systemMessage": "=Your role is to analyze requests, clarify uncertainties, and, most importantly, store and retrieve \"memories\" about anything the user inputs.\n\nCore Capabilities:\nContext Awareness - The date and time is: {{ $now }}\n\nMemory Management - You interact with Supabase tools for memory handling:\n\nCall the Store_Memory tool to save new \"memories\" and remenber details and facts based on user input. Sunmarize the user's input into a 1-line sentence to be stored in a Supabase database.\n\nCall the Get_Memory tool to retrieve saved \"memories\" to answer the user's questions and draft messages.\n\nClarification Before Action - If a request is unclear, ask the user clarifying questions before calling any tools to ensure accuracy. Always call the Get_ Memory tool to check stored information before answering.\n\nMemory Handling Workflow:\nretrieves relevant memories before replying or storing new information.\n\nCheck for duplicates - If the user provides information sinilar to an existing menory, do not store it again. If a duplicate is found, acknowledge it with a response like:\n\"I already know that! Here's the info you shared earlier.\" Only store new, unique information to avoid redundancy.\n\nBehavior Guidelines:\nMaintain a professional, sweet, and friendly tone.\nBe proactive in recalling relevant infornation to enhance your responses.\nClarity ambiguous requests before executing tasks:\nConfirm actions when appropriate to ensure user expectations are met."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
         480,
-        -140
+        -120
       ],
-      "id": "9a2ab1dd-bcaf-4766-8e79-d20615f9343a",
+      "id": "0e9b0a82-2e81-4150-88ca-32fea309cd2c",
       "name": "AI Agent"
     },
     {
@@ -114,9 +114,9 @@
       "typeVersion": 1,
       "position": [
         460,
-        80
+        100
       ],
-      "id": "de04d76a-f89f-46ed-b817-264ff11ed5c8",
+      "id": "8c34fc1f-9ca2-4054-8f40-71175548b776",
       "name": "Mistral Cloud Chat Model",
       "credentials": {
         "mistralCloudApi": {
@@ -128,15 +128,15 @@
     {
       "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $json.Text }}"
+        "sessionKey": "={{ $('Switch').item.json.message.message_id.toString() }}"
       },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
         640,
-        100
+        120
       ],
-      "id": "f1cb2318-5840-4f82-a05a-b3a531ad74e4",
+      "id": "b8247fb3-a798-4714-bf93-31ace14225db",
       "name": "Window Buffer Memory"
     },
     {
@@ -163,9 +163,9 @@
       "typeVersion": 1,
       "position": [
         840,
-        80
+        100
       ],
-      "id": "16c41943-ed21-4d2f-9132-3ee1bb997273",
+      "id": "b81f8389-4e6d-4988-b2df-c44e7727b716",
       "name": "Store_Memory",
       "credentials": {
         "supabaseApi": {
@@ -185,9 +185,9 @@
       "typeVersion": 1,
       "position": [
         960,
-        60
+        80
       ],
-      "id": "ad8b2719-c73f-4ba0-accb-a36946b113eb",
+      "id": "24c5b876-c7d8-4274-b0e0-1a9a8438a3cd",
       "name": "Get_Memory",
       "credentials": {
         "supabaseApi": {
@@ -195,9 +195,61 @@
           "name": "Supabase account"
         }
       }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        840,
+        -120
+      ],
+      "id": "aa9d1b69-6b56-40e5-af06-316199c11175",
+      "name": "Telegram",
+      "webhookId": "b07cbbbf-71cf-407a-8eb3-519263b48f78",
+      "credentials": {
+        "telegramApi": {
+          "id": "fawIAJ2ZNZhJXtkt",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 643454308,
+          "message": {
+            "message_id": 31,
+            "from": {
+              "id": 7212860886,
+              "is_bot": false,
+              "first_name": "Hikarirun",
+              "last_name": "å…",
+              "username": "hikarirunn",
+              "language_code": "fr"
+            },
+            "chat": {
+              "id": 7212860886,
+              "first_name": "Hikarirun",
+              "last_name": "å…",
+              "username": "hikarirunn",
+              "type": "private"
+            },
+            "date": 1741756549,
+            "text": "Hi"
+          }
+        }
+      }
+    ]
+  },
   "connections": {
     "Telegram Trigger": {
       "main": [
@@ -275,17 +327,28 @@
           }
         ]
       ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "82a93e84-99ec-463a-9ac7-2f207e80f0c1",
+  "versionId": "af0c1917-5193-4294-b8c1-2f5092aac058",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "a3afd51795ea51fa25e0604fc55b0cafa31fdb1a7d764e7051539d3482821f0f"
   },
-  "id": "H52zZSnpcEG4mA4a",
+  "id": "Ff1Ean8O3L6BLLFm",
   "tags": []
 }
